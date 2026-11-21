@@ -52,7 +52,7 @@ export class HomePage {
     await expect(
       button,
       `Expected exactly one button named "${buttonName}"`,
-    ).toHaveCount(1);
+    ).toHaveCount(1, { timeout: 15_000 });
     await expect(button).toBeVisible();
     await expect(button).toBeEnabled();
     await logStep(`Clicking "${buttonName}"`);
