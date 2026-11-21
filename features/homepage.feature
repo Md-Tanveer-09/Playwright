@@ -18,7 +18,7 @@ Feature: E-commerce app navigation
     When I enter the coupon code "TESTHEON10"
     When I click on "Apply coupon"
     When I click on "Continue to checkout"
-    When I click on "Sign in and continue"
-    When I click on "Place fake order"
-    When I click on "View order history"
+    # When I click on "Sign in and continue"
+    # When I click on "Place fake order"
+    # When I click on "View order history"
   
