@@ -12,10 +12,8 @@ const linkSelectors: Record<string, string> = {
   Cart: 'a[href="/practice/apps/ecommerce/cart/"]:has(#store-cart-count)',
   'Apply coupon': 'button.button.button--secondary[type="submit"]',
   'Continue to checkout': '#store-checkout-link',
-  'Sign in and continue': '#checkout-login-form > button.button--primary[type="submit"]',
   'Place fake order': '#store-checkout-form > button.button.button--primary[type="submit"]',
   'View order history': 'a.button.button--primary[href="/practice/apps/ecommerce/orders/"]',
-  
 };
 
 export class HomePage {
@@ -42,6 +40,24 @@ export class HomePage {
     await logStep(`Clicking "${linkName}"`);
     await link.click();
     await logStep(`Clicked "${linkName}"`);
+  }
+
+  async clickButton(buttonName: string): Promise<void> {
+    const button = this.page.getByRole('button', {
+      name: buttonName,
+      exact: true,
+    });
+
+    await logStep(`Finding "${buttonName}"`);
+    await expect(
+      button,
+      `Expected exactly one button named "${buttonName}"`,
+    ).toHaveCount(1);
+    await expect(button).toBeVisible();
+    await expect(button).toBeEnabled();
+    await logStep(`Clicking "${buttonName}"`);
+    await button.click();
+    await logStep(`Clicked "${buttonName}"`);
   }
 
   async addProductToCart(productName: string): Promise<void> {

@@ -33,6 +33,10 @@ When('I click on {string}', async ({ page }, linkName: string) => {
   await new HomePage(page).clickLink(linkName);
 });
 
+When('I click the {string} button', async ({ page }, buttonName: string) => {
+  await new HomePage(page).clickButton(buttonName);
+});
+
 When(
   'I enter the coupon code {string}',
   async ({ page }, couponCode: string) => {

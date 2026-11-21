@@ -3,7 +3,7 @@ Feature: E-commerce app navigation
   I want to open the e-commerce app
   So that I can verify its page URL
 
-  @smoke1
+  @smoke
   Scenario: Open the home page
     Given I navigate to the "Home page"
     Then the page URL should match the "Home page"
@@ -18,7 +18,7 @@ Feature: E-commerce app navigation
     When I enter the coupon code "TESTHEON10"
     When I click on "Apply coupon"
     When I click on "Continue to checkout"
-    # When I click on "Sign in and continue"
-    # When I click on "Place fake order"
-    # When I click on "View order history"
+    When I click the "Sign in and continue" button
+    When I click the "Place fake order" button
+    When I click on "View order history"
   
