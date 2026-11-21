@@ -86,6 +86,21 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
+      - name: Add Allure Report Link to Summary
+        if: success()
+        shell: bash
+        env:
+          REPORT_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          echo "# 🎭 Playwright Test Execution Report" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "✅ Allure report successfully deployed!" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "### 📊 Allure HTML Report" >> "$GITHUB_STEP_SUMMARY"
+          echo "[Click here to view Allure Report]($REPORT_URL)" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Report URL: $REPORT_URL" >> "$GITHUB_STEP_SUMMARY"
+
   test-result:
     needs: [test, deploy]
     if: always()
