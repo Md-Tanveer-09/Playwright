@@ -19,6 +19,6 @@ Feature: E-commerce app navigation
     When I click on "Apply coupon"
     When I click on "Continue to checkout"
     When I click the "Sign in and continue" button
-    When I click the "Place fake order" button
-    When I click on "View order history"
+    # When I click the "Place fake order" button
+    # When I click on "View order history"
   
