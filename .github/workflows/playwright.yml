@@ -62,6 +62,15 @@ jobs:
         with:
           path: allure-report/
 
+      # Fail this job only when npm test fails.
+      # Report generation and upload are allowed to finish first.
+      - name: Set Playwright test result
+        if: always() && steps.run-tests.outcome == 'failure'
+        run: |
+          echo "Playwright tests failed."
+          echo "Check the Allure report for details."
+          exit 1
+
   deploy:
     needs: test
     if: always() && needs.test.outputs.report_available == 'true'
@@ -100,16 +109,3 @@ jobs:
           echo "[Click here to view Allure Report]($REPORT_URL)" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "Report URL: $REPORT_URL" >> "$GITHUB_STEP_SUMMARY"
-
-  test-result:
-    needs: [test, deploy]
-    if: always()
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check Playwright test result
-        if: needs.test.outputs.test_outcome == 'failure'
-        run: |
-          echo "Playwright tests failed."
-          echo "Allure report deployment was still attempted."
-          exit 1
