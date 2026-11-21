@@ -1,3 +1,4 @@
+
 name: Playwright Tests and Allure Report
 
 on:
@@ -16,8 +17,11 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
+
     outputs:
       report_available: ${{ steps.report-check.outputs.available }}
+      test_outcome: ${{ steps.run-tests.outcome }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -34,7 +38,9 @@ jobs:
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
 
-      - name: Run tests and generate Allure report
+      - name: Run Playwright tests and generate Allure report
+        id: run-tests
+        continue-on-error: true
         run: npm test
 
       - name: Check for generated Allure report
@@ -44,8 +50,10 @@ jobs:
         run: |
           if [[ -f allure-report/index.html ]]; then
             echo "available=true" >> "$GITHUB_OUTPUT"
+            echo "Allure report found."
           else
             echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "Allure report not found."
           fi
 
       - name: Upload Allure report
@@ -57,18 +65,36 @@ jobs:
   deploy:
     needs: test
     if: always() && needs.test.outputs.report_available == 'true'
+
     runs-on: ubuntu-latest
+
     permissions:
       pages: write
       id-token: write
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
         with:
           enablement: true
+
       - name: Deploy Allure report
         id: deployment
         uses: actions/deploy-pages@v4
+
+  test-result:
+    needs: [test, deploy]
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Playwright test result
+        if: needs.test.outputs.test_outcome == 'failure'
+        run: |
+          echo "Playwright tests failed."
+          echo "Allure report deployment was still attempted."
+          exit 1
