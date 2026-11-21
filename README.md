@@ -23,6 +23,20 @@ a test fails; the command still exits with the test failure status.
 Each scenario runs in desktop (1280×720), tablet (768×1024), and mobile
 (390×844) viewports.
 
+## Run tests with GitHub Actions
+
+The **Playwright Tests and Allure Report** workflow runs automatically when
+changes are pushed to `main`. To run it manually, open the repository's
+**Actions** tab, select the workflow, and choose **Run workflow**.
+
+The workflow publishes the generated report to GitHub Pages, including when
+tests fail as long as Allure report generation completes. Enable GitHub Pages
+for the repository by setting **Settings → Pages → Build and deployment →
+Source** to **GitHub Actions**. After a successful report deployment, view it
+directly in your browser:
+
+[Open the latest Allure report](https://md-tanveer-09.github.io/Playwright/)
+
 Open the generated report with:
 
 ```bash
